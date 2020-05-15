@@ -3,7 +3,7 @@
 Contains an Implementation of an SNMP agent that exposes three custom OIDs.
 
 ## How to Run
-The script take care of everything required to set up a custom, minimal snmpd instance that runs under your ordinary user account and separate from any system-wide running snmpd.
+The script takes care of everything required to set up a custom, minimal snmpd instance that runs under your ordinary user account and separate from any system-wide running snmpd.
 
 Run "run_agent.sh" and it will even tell you the SNMP commands that you can use to test that everything works.
 
