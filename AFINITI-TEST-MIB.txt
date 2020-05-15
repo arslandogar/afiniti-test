@@ -23,21 +23,21 @@ afinitiTests MODULE-IDENTITY
 --
 -- top level structure
 --
-versionNumberValue       OBJECT IDENTIFIER ::= { afinitiTests 1 }
-latestSignalValue       OBJECT IDENTIFIER ::= { afinitiTests 2 }
-diskSpaceValue        OBJECT IDENTIFIER ::= { afinitiTests 3 }
+versionNumber       OBJECT IDENTIFIER ::= { afinitiTests 1 }
+latestSignal       OBJECT IDENTIFIER ::= { afinitiTests 2 }
+diskSpace        OBJECT IDENTIFIER ::= { afinitiTests 3 }
 
 --
 -- Example scalars
 --
-versionNumber OBJECT-TYPE
+versionNumberValue OBJECT-TYPE
     SYNTAX      OCTET STRING
     MAX-ACCESS  read-only
     STATUS      current
     DESCRIPTION
-        "the value of static version number string"
+        "the value of version number string"
     DEFVAL { "6.6.1" }
-    ::= { versionNumberValue 1 }
+    ::= { versionNumber 1 }
     
 latestSignalValue OBJECT-TYPE
     SYNTAX      OCTET STRING
@@ -46,7 +46,7 @@ latestSignalValue OBJECT-TYPE
     DESCRIPTION
         "query a Postgres table named ‘snmpSignals’ in a database named ‘afinitiTest’ and return the latest value of the column ‘signalValue’ as determined by the timestamp column ‘signalTime’"
     DEFVAL { "hello" }
-    ::= { latestSignalValue 2 }
+    ::= { latestSignal 1 }
 
 diskSpaceValue OBJECT-TYPE
     SYNTAX      Integer
@@ -55,7 +55,7 @@ diskSpaceValue OBJECT-TYPE
     DESCRIPTION
         "total disk space used (in bytes) for the /var/log/ folder"
     DEFVAL { 3 }
-    ::= { diskSpaceValue 3 }
+    ::= { diskSpace 1 }
 
 
 -- END:  Don't forget this!
