@@ -24,8 +24,8 @@ Run "run_agent.sh" and it will even tell you the SNMP commands that you can use 
 	 - Used psycopg2 module to connect and query from PostgreSQL database.
 	
 Main reason for using Python was its modules. 
-netsnmpagent provides is a very convenient way to write a sub-agent using AgentX protocol.
-I initaily tried implementing sub-agent using a bash script but found a bit complex to connect and query from database so I switched to Python because psycopg2 makes using PostgresSQL database in Python code very easy and straightforward.
+netsnmpagent provides a very convenient way to write a sub-agent using AgentX protocol.
+I initaily tried implementing sub-agent using a bash script but found it a bit complex to connect and query from database so I switched to Python because psycopg2 makes using PostgresSQL database in Python code very easy and straightforward.
 - Shell
 	- Shell scripting to set up an snmpd instance.
 
