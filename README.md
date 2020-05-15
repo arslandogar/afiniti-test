@@ -16,7 +16,7 @@ Run "run_agent.sh" and it will even tell you the SNMP commands that you can use 
  - Learn about net-snmp and what are different ways to extend its functionality.
  - Learn how to use python-netsnmpagent.
  - Set up an snmp agent with custom enterprise OIDs using python-netsnmpagent module.
- - Write script setup an snmpd instance to test the agent.
+ - Write script to setup an snmpd instance to test the agent.
 
 ## Languages Used Choices
  - Python
@@ -25,7 +25,7 @@ Run "run_agent.sh" and it will even tell you the SNMP commands that you can use 
 	
 Main reason for using Python was its modules. 
 netsnmpagent provides is a very convenient way to write a sub-agent using AgentX protocol.
-I initaily tried sub-agents using a bash script but found a bit complex to connect and query from database so I switched to Python because psycopg2 makes using PostgresSQL database in Python code very easy and straightforward.
+I initaily tried implementing sub-agent using a bash script but found a bit complex to connect and query from database so I switched to Python because psycopg2 makes using PostgresSQL database in Python code very easy and straightforward.
 - Shell
 	- Shell scripting to set up an snmpd instance.
 
