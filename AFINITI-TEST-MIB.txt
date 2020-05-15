@@ -37,7 +37,7 @@ versionNumberValue OBJECT-TYPE
     DESCRIPTION
         "the value of version number string"
     DEFVAL { "6.6.1" }
-    ::= { versionNumber 1 }
+    ::= { versionNumber 0 }
     
 latestSignalValue OBJECT-TYPE
     SYNTAX      OCTET STRING
@@ -46,7 +46,7 @@ latestSignalValue OBJECT-TYPE
     DESCRIPTION
         "query a Postgres table named ‘snmpSignals’ in a database named ‘afinitiTest’ and return the latest value of the column ‘signalValue’ as determined by the timestamp column ‘signalTime’"
     DEFVAL { "hello" }
-    ::= { latestSignal 1 }
+    ::= { latestSignal 0 }
 
 diskSpaceValue OBJECT-TYPE
     SYNTAX      Integer
@@ -55,7 +55,7 @@ diskSpaceValue OBJECT-TYPE
     DESCRIPTION
         "total disk space used (in bytes) for the /var/log/ folder"
     DEFVAL { 3 }
-    ::= { diskSpace 1 }
+    ::= { diskSpace 0 }
 
 
 -- END:  Don't forget this!
