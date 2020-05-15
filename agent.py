@@ -9,7 +9,7 @@ import netsnmpagent
 from configparser import ConfigParser
 
 
-def config(filename='dbConfig.ini', section='postgresql'):
+def connectDB(filename='config/dbConfig.ini', section='postgresql'):
     # create a parser
     parser = ConfigParser()
     # read config file
@@ -28,13 +28,17 @@ def config(filename='dbConfig.ini', section='postgresql'):
     return db
 
 
+#return the latest value of the column ‘signalValue'
+#from table named ‘snmpSignals’ in a database named ‘afinitiTest’
 def fetchLatestSignal():
-    """ Connect to the PostgreSQL database server """
+    """ Connect to the PostgreSQL database server
+        Return the latest value of the column ‘signalValue' 
+        from table named ‘snmpSignals’ in a database named ‘afinitiTest’  """
     getLatestSignal = None
     conn = None
     try:
         # read connection parameters
-        params = config()
+        params = connectDB()
 
         # connect to the PostgreSQL server
         print('Connecting to the PostgreSQL database...')
@@ -89,7 +93,7 @@ rows, columns = os.popen("stty size", "r").read().split()
 # fully-qualified path to AFINITI-TEST-MIB.txt ourselves here, so that you
 # don't have to copy the MIB to /usr/share/snmp/mibs.
 try:
-    agent = netsnmpagent.netsnmpAgent(AgentName="SimpleAgent",
+    agent = netsnmpagent.netsnmpAgent(AgentName="Agent",
                                       MasterSocket=options.mastersocket,
                                       PersistenceDir=options.persistencedir,
                                       MIBFiles=["AFINITI-TEST-MIB.txt"])
@@ -97,16 +101,14 @@ except netsnmpagent.netsnmpAgentException as e:
     print("{0}: {1}".format(prgname, e))
     sys.exit(1)
 
-logSize = shutil.disk_usage("/var/log")
-print(logSize.used)
-# Then we create all SNMP scalar variables we're willing to serve.
+# Then we create all SNMP variables we're willing to serve.
 versionNumber = agent.OctetString(oidstr="AFINITI-TEST-MIB::versionNumber",
                                   initval="6.6.1")
 latestSignal = agent.OctetString(oidstr="AFINITI-TEST-MIB::latestSignal",
                                  initval=fetchLatestSignal())
 diskSpace = agent.Counter64(oidstr="AFINITI-TEST-MIB::diskSpace",
-                            initval=logSize.used)
-#versionNumber.update("hello")
+                            initval=shutil.disk_usage("/var/log").used)
+
 # Finally, we tell the agent to "start". This actually connects the
 # agent to the master agent.
 try:
@@ -117,16 +119,18 @@ except netsnmpagent.netsnmpAgentException as e:
 
 print("{0}: AgentX connection to snmpd established.".format(prgname))
 
-# # Helper function that dumps the state of all registered SNMP variables
-# def DumpRegistered():
-#     for context in agent.getContexts():
-#         print("{0}: Registered SNMP objects in Context \"{1}\": ".format(
-#             prgname, context))
-#         vars = agent.getRegistered(context)
-#         pprint.pprint(vars, width=columns)
-#         print
 
-# DumpRegistered()
+# Helper function that dumps the state of all registered SNMP variables
+def DumpRegistered():
+    for context in agent.getContexts():
+        print("{0}: Registered SNMP objects in Context \"{1}\": ".format(
+            prgname, context))
+        vars = agent.getRegistered(context)
+        pprint.pprint(vars, width=columns)
+        print
+
+
+DumpRegistered()
 
 
 # Install a signal handler that terminates our simple agent when
@@ -139,15 +143,17 @@ def TermHandler(signum, frame):
 signal.signal(signal.SIGINT, TermHandler)
 signal.signal(signal.SIGTERM, TermHandler)
 
-# # Install a signal handler that dumps the state of all registered values
-# # when SIGHUP is received
-# def HupHandler(signum, frame):
-#     DumpRegistered()
 
-# signal.signal(signal.SIGHUP, HupHandler)
+# Install a signal handler that dumps the state of all registered values
+# when SIGHUP is received
+def HupHandler(signum, frame):
+    DumpRegistered()
 
-# # The simple agent's main loop. We loop endlessly until our signal
-# # handler above changes the "loop" variable.
+
+signal.signal(signal.SIGHUP, HupHandler)
+
+# The agent's main loop. We loop endlessly until our signal
+# handler above changes the "loop" variable.
 print(
     "{0}: Serving SNMP requests, send SIGHUP to dump SNMP object state, press ^C to terminate..."
     .format(prgname))
@@ -155,17 +161,6 @@ loop = True
 while (loop):
     # Block and process SNMP requests, if available
     agent.check_and_process()
-
-    # Since we didn't give simpleCounter, simpleCounter64 and simpleTimeTicks
-    # a real meaning in the SIMPLE-MIB, we can basically do with them whatever
-    # we want. Here, we just increase them, although in different manners.
-    #versionNumber.update(versionNumber + 2)
-    #simpleCounter64.update(simpleCounter64.value() + 4294967294)
-    #simpleTimeTicks.update(simpleTimeTicks.value() + 1)
-
-    # With counters, you can also call increment() on them
-    #simpleCounter32Context2.increment()  # By 1
-    #simpleCounter64Context2.increment(5)  # By 5
 
 print("{0}: Terminating.".format(prgname))
 agent.shutdown()
