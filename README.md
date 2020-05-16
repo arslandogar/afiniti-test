@@ -24,7 +24,9 @@ To connect to Postgres database, change connection parameters in config/dbConfig
 
 ## Languages Used
 
-- Python - Used python-netsnmpagent moule to implement Net-SNMP subagent in Python. - Used psycopg2 module to connect and query from PostgreSQL database.
+- Python 
+  - Used python-netsnmpagent moule to implement Net-SNMP subagent in Python. 
+  - Used psycopg2 module to connect and query from PostgreSQL database.
 
 Main reason for using Python was its modules.
 netsnmpagent provides a very convenient way to write a sub-agent using AgentX protocol.
